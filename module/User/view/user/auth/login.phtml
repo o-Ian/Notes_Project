@@ -1,17 +1,7 @@
-<?php
-if ($isLogged) :
-    echo 'username de quem está logado: ' . $isLogged;
-?>
-
-    <div>ESTOU LOGADO</div>
-<?php else :
-?>
-    <div>NÃO ESTOU LOGADO</div>
-<?php endif; ?>
 <div class="row h-100 justify-content-center align-items-center">
     <?php
 
-    $form->setAttribute('action', $this->url('auth', ['action' => 'login']));
+    $form->setAttribute('action', $this->url('user/login'));
     $form->prepare();
 
     echo $this->form()->openTag($form);

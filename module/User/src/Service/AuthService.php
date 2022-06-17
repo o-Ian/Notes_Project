@@ -34,7 +34,7 @@ class AuthService
     public function logout()
     {
         if (!$this->authService->getIdentity()) {
-            throw new \Exception('The user is logged out');
+            throw new \Exception("There's no user logged in the system");
         }
 
         $this->authService->clearIdentity();

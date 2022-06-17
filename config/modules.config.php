@@ -23,5 +23,5 @@ return [
     'Laminas\DeveloperTools',
     'Application',
     'User',
-    'Note'
+    'Note',
 ];

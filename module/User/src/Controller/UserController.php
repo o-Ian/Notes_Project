@@ -10,7 +10,7 @@ use User\Form\RegisterForm;
 use User\Model\User;
 use User\Service\UserService;
 
-class IndexController extends AbstractActionController
+class UserController extends AbstractActionController
 {
     protected $userService;
 
@@ -24,8 +24,11 @@ class IndexController extends AbstractActionController
         return new ViewModel();
     }
 
-    public function registrationAction()
+    public function registerAction()
     {
+
+        $this->isLogged();
+
         $form = new RegisterForm();
         $request = $this->getRequest();
         if (!$request->isPost()) {
@@ -42,6 +45,6 @@ class IndexController extends AbstractActionController
         $user->exchangeArray($form->getData());
         $this->userService->saveUser($user);
         $this->flashMessenger()->addSuccessMessage('You were registrated, now sign in!');
-        return $this->redirect()->toRoute('user', ['action' => 'login', 'controller' => 'auth']);
+        return $this->redirect()->toRoute('user/login');
     }
 }

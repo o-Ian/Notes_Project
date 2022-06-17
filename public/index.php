@@ -10,7 +10,7 @@ use Laminas\Stdlib\ArrayUtils;
  * to the application root now.
  */
 chdir(dirname(__DIR__));
-
+ini_set('display_errors', true);
 // Decline static file requests back to the PHP built-in webserver
 if (php_sapi_name() === 'cli-server') {
     $path = realpath(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
@@ -23,12 +23,12 @@ if (php_sapi_name() === 'cli-server') {
 // Composer autoloading
 include __DIR__ . '/../vendor/autoload.php';
 
-if (! class_exists(Application::class)) {
+if (!class_exists(Application::class)) {
     throw new RuntimeException(
         "Unable to load application.\n"
-        . "- Type `composer install` if you are developing locally.\n"
-        . "- Type `vagrant ssh -c 'composer install'` if you are using Vagrant.\n"
-        . "- Type `docker-compose run laminas composer install` if you are using Docker.\n"
+            . "- Type `composer install` if you are developing locally.\n"
+            . "- Type `vagrant ssh -c 'composer install'` if you are using Vagrant.\n"
+            . "- Type `docker-compose run laminas composer install` if you are using Docker.\n"
     );
 }
 

@@ -6,10 +6,11 @@ use Exception;
 use Laminas\Authentication\Result;
 use Laminas\Validator\EmailAddress;
 use User\Controller\IndexController;
+use User\Controller\UserController;
 use User\Model\User;
 use User\Model\UserTable;
 
-class UserService extends IndexController
+class UserService extends UserController
 {
     protected $table;
     protected $emailValidator;

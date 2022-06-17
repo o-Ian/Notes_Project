@@ -20,6 +20,7 @@ use Laminas\Authentication\Storage\Session as SessionStorage;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\ServiceManager;
 use User\Controller\AuthController;
+use User\Controller\UserController;
 use User\Service\AuthService;
 
 class Module
@@ -76,8 +77,8 @@ class Module
     {
         return [
             'factories' => [
-                IndexController::class => function ($container) {
-                    return new IndexController($container->get(UserService::class));
+                UserController::class => function ($container) {
+                    return new UserController($container->get(UserService::class));
                 },
                 AuthController::class => function ($container) {
                     return new AuthController($container->get(UserService::class), $container->get(AuthService::class));

@@ -22,20 +22,19 @@ class AuthController extends AbstractActionController
 
     public function loginAction()
     {
-        $isLogged = false;
-        if ($this->authService->authService->getIdentity()) {
-            $isLogged = $this->authService->authService->getIdentity();
-        }
+
+        $this->isLogged();
+
         $form = new LoginForm();
         if (!$this->getRequest()->isPost()) {
-            return ['form' => $form, 'isLogged' => $isLogged];
+            return ['form' => $form];
         }
 
         $form->setData($this->getRequest()->getPost());
 
         if (!$form->isValid()) {
             $this->flashMessenger()->addErrorMessage('The form is not valid');
-            return $this->redirect()->toRoute('auth', ['action' => 'login']);
+            return $this->redirect()->toRoute('user/login');
         }
 
         $data = $form->getData();
@@ -47,7 +46,19 @@ class AuthController extends AbstractActionController
             return $this->redirect()->toRoute('home');
         } else {
             $this->flashMessenger()->addErrorMessage('E-mail and/or username are wrong');
-            return $this->redirect()->toRoute('auth', ['action' => 'login']);
+            return $this->redirect()->toRoute('user/login');
         }
+    }
+
+    public function logoutAction()
+    {
+        $this->authService->logout();
+
+        if (!$this->identity()) {
+            $this->flashMessenger()->addSuccessMessage('You have been logged out successfully');
+            return $this->redirect()->toRoute('home');
+        }
+        $this->flashMessenger()->addErrorMessage('A unexpected error happened when we tried to log you out');
+        return $this->redirect()->toRoute('home');
     }
 }
