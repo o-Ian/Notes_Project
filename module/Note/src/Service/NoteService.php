@@ -4,15 +4,18 @@ namespace Note\Service;
 
 use Laminas\Validator\EmailAddress;
 use Note\Model\NoteTable;
+use User\Model\UserTable;
 
 class NoteService
 {
     protected $table;
     protected $emailValidator;
+    protected $userTable;
 
-    public function __construct(NoteTable $table, EmailAddress $emailValidator)
+    public function __construct(NoteTable $table, UserTable $userTable, EmailAddress $emailValidator)
     {
         $this->table = $table;
+        $this->userTable = $userTable;
         $this->emailValidator = $emailValidator;
     }
 
@@ -36,12 +39,21 @@ class NoteService
         $this->table->saveNote($data);
     }
 
-    public function getNote($note)
+    public function getNote($id)
     {
         try {
-            $this->table->getNote($note->getId());
+            $this->table->getNote($id);
         } catch (\Throwable $th) {
             echo 'A error happened when we tried to get your note  : ' . $th;
+        }
+    }
+
+    public function getNotes($user_id)
+    {
+        try {
+            return $this->table->getNotes($user_id);
+        } catch (\Throwable $th) {
+            echo 'A error happened when we tried to list your notes  : ' . $th;
         }
     }
 

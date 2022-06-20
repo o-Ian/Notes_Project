@@ -13,40 +13,10 @@ class User /* implements InputFilterAwareInterface */
     protected $firstName;
     protected $lastName;
     protected $email;
-    /* protected $inputFilter;
-
-    public function setInputFilter(InputFilterInterface $inputFilter)
-    {
-        throw new \Exception("Not used");
-    }
-
-    public function getInputFilter()
-    {
-        if (!$this->inputFilter) {
-            $inputFilter = new InputFilter();
-            $inputFilter->add([
-                'name' => 'firstName',
-                'required' => true,
-                'filters' => [
-                    ['name' => 'StringTrim']
-                ],
-                'validators' => [
-                    [
-                        'name' => 'StringLength',
-                        'options' => [
-                            'min' => 1,
-                            'max' => 15,
-                        ]
-                    ]
-                ]
-            ]);
-            $this->inputFilter = $inputFilter;
-        }
-        return $this->inputFilter;
-    } */
 
     public function exchangeArray($data)
     {
+        $this->setId($data['id']);
         $this->setUsername($data['username']);
         $this->setFirstName($data['firstName']);
         $this->setLastName($data['lastName']);

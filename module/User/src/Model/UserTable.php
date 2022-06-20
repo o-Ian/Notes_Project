@@ -3,6 +3,7 @@
 namespace User\Model;
 
 use Laminas\Db\TableGateway\TableGatewayInterface;
+use Laminas\Stdlib\ArrayUtils;
 use User\Service\UserService;
 
 class UserTable
@@ -21,10 +22,10 @@ class UserTable
         return $this->tableGateway->insert($data);
     }
 
-    public function getUser($id)
+    public function getUser($username)
     {
-        $data = $this->tableGateway->select(['id' => $id]);
-        return $data->current;
+        $data = $this->tableGateway->select(['username' => $username]);
+        return $data;
     }
 
     public function authUser($username, $email)
@@ -57,6 +58,6 @@ class UserTable
 
     public function getNotes($user)
     {
-        return $user->findDependentRowset('NoteTable')->current;
+        return $user->findDependentRowset('NoteTable');
     }
 }

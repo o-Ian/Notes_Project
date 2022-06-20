@@ -44,7 +44,7 @@ class UserController extends AbstractActionController
 
         $user->exchangeArray($form->getData());
         $this->userService->saveUser($user);
-        $this->flashMessenger()->addSuccessMessage('You were registrated, now sign in!');
+        $this->flashMessenger()->addSuccessMessage('You are registered, now sign in!');
         return $this->redirect()->toRoute('user/login');
     }
 }

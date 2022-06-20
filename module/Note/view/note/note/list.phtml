@@ -1,0 +1,60 @@
+<?= $this->headTitle('Listing - Notes') ?>
+
+<h1>Listagem das notas</h1>
+
+<div class="div"></div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Are you sure you want to delete the selected item?</h5><button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <input type="hidden" name="note_id" id="note_id" value="">
+            <div class="modal-footer">
+                <a id="dataConfirm"><button type="button" class="btn btn-danger">Delete</button></a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php if (count($notes) > 0) : ?>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Content</th>
+                <th scope="col">Buttons</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach ($notes as $note) :
+            ?>
+                <tr>
+                    <th scope="row"><?= $note->getId() ?></th>
+                    <td><?= $note->getTitle() ?></td>
+                    <td><?= $note->getContent() ?></td>
+                    <td class="table-btn">
+                        <button class="btn btn-primary">View</button>
+                        <button class="btn btn-info">Edit</button>
+                        <button id="btn-delete" class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-href="<?= $this->url('notes/delete', ['id' => $note->getId()]) ?>">Delete</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php else : ?>
+    <p style=" font-size: 21px;">Não há notas adicionados, quer criar uma?</p>
+    <a href="<?= $this->url('home') ?>"><button class="btn btn-primary">Clique aqui</button></a>
+<?php endif ?>
+
+<script>
+    $('#deleteModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var href_Id = button.data('href');
+        $('#dataConfirm').attr('href', href_Id);
+    })
+</script>

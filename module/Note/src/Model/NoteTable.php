@@ -12,7 +12,7 @@ class NoteTable
         'User' => [
             'columns' => ['user_id'],
             'refTableClass' => 'UserTable',
-            'refColumns' => ['id']
+            'refColumns' => ['id'],
         ]
     ];
 
@@ -30,6 +30,12 @@ class NoteTable
     {
         $data = $this->tableGateway->select(['id' => $id]);
         return $data->current;
+    }
+
+    public function getNotes($user_id)
+    {
+        $data = $this->tableGateway->select(['user_id' => $user_id]);
+        return $data;
     }
 
     public function deleteNote($id)

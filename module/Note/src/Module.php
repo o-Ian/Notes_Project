@@ -10,11 +10,12 @@ use Laminas\Db\TableGateway\TableGateway;
 use Laminas\Validator\EmailAddress;
 use PhpParser\Node\Expr\FuncCall;
 use Note\Controller\IndexController;
+use Note\Controller\NoteController;
 use Note\Model\Note;
 use Note\Model\NoteTable;
 use Note\Service\NoteService;
-
-
+use User\Model\UserTable;
+use User\Service\UserService;
 
 class Module
 {
@@ -31,7 +32,8 @@ class Module
             'factories' => [
                 NoteService::class => function ($container) {
                     $table = $container->get(NoteTable::class);
-                    return new NoteService($table, new EmailAddress);
+                    $userTable = $container->get(UserTable::class);
+                    return new NoteService($table, $userTable, new EmailAddress);
                 },
                 NoteTable::class => function ($container) {
                     $tableGateway = $container->get(NoteTableGateway::class);
@@ -51,8 +53,8 @@ class Module
     {
         return [
             'factories' => [
-                IndexController::class => function ($container) {
-                    return new IndexController($container->get(NoteService::class));
+                NoteController::class => function ($container) {
+                    return new NoteController($container->get(NoteService::class));
                 }
             ]
         ];

@@ -7,19 +7,39 @@ namespace Note;
 use Laminas\Router\Http\Literal;
 use Laminas\Router\Http\Segment;
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Note\Controller\NoteController;
 
 return [
     'router' => [
         'routes' => [
-            'note' => [
-                'type'    => Segment::class,
+            'notes' => [
+                'type'    => Literal::class,
+                'may_terminate' => false,
                 'options' => [
-                    'route'    => '/note[/:action]',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
+                    'route' => '/notes'
                 ],
+                'child_routes' => [
+                    'list' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/list',
+                            'defaults' => [
+                                'controller' => NoteController::class,
+                                'action' => 'list'
+                            ]
+                        ]
+                    ],
+                    'delete' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/delete[/:id]',
+                            'defaults' => [
+                                'controller' => NoteController::class,
+                                'action' => 'delete',
+                            ]
+                        ]
+                    ]
+                ]
             ],
         ],
     ],

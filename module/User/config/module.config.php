@@ -16,7 +16,7 @@ return [
         'routes' => [
             'user' => [
                 'type' => Placeholder::class,
-                'may_terminate' => true,
+                'may_terminate' => false,
                 'child_routes' => [
                     'register' => [
                         'type' => Literal::class,

@@ -56,15 +56,13 @@ class UserService extends UserController
             throw new \Exception('The given email is not valid!');
         }
 
-
-
         $this->table->saveUser($data);
     }
 
-    public function getUser($id)
+    public function getUser($username)
     {
         try {
-            return $this->table->getUser($id);
+            return $this->table->getUser($username);
         } catch (\Throwable $th) {
             throw new Exception('A error happened when we tried to get your user info: ' . $th);
         }
@@ -73,7 +71,6 @@ class UserService extends UserController
     public function authUser($username, $email)
     {
         $data = $this->table->authUser($username, $email);
-
         if ($data->count() != 1) {
             return;
         }
