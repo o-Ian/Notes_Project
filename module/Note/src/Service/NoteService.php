@@ -22,18 +22,17 @@ class NoteService
     public function saveNote($note)
     {
         $data = [
-            'id' => $note->getId(),
             'title' => $note->getTitle(),
             'content' => $note->getContent(),
+            'user_id' => $note->getUser_Id()
         ];
-
         foreach ($data as $key => $value) {
             if ($value == null) {
-                throw new \Throwable("There's null values");
+                throw new \Exception("There's null values, all the inputs are mandatory");
             }
         }
         if (strlen($data['title']) > 50) {
-            throw new \Throwable("The title has a maximum size of 15 characters");
+            throw new \Exception("The title has a maximum size of 50 characters");
         }
 
         $this->table->saveNote($data);
@@ -42,7 +41,8 @@ class NoteService
     public function getNote($id)
     {
         try {
-            $this->table->getNote($id);
+            $data = $this->table->getNote($id);
+            return $data;
         } catch (\Throwable $th) {
             echo 'A error happened when we tried to get your note  : ' . $th;
         }

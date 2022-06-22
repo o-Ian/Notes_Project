@@ -16,11 +16,11 @@ class User /* implements InputFilterAwareInterface */
 
     public function exchangeArray($data)
     {
-        $this->setId($data['id']);
-        $this->setUsername($data['username']);
-        $this->setFirstName($data['firstName']);
-        $this->setLastName($data['lastName']);
-        $this->setEmail($data['email']);
+        $this->setId(trim($data['id']));
+        $this->setUsername(trim($data['username']));
+        $this->setFirstName(trim($data['firstName']));
+        $this->setLastName(trim($data['lastName']));
+        $this->setEmail(trim($data['email']));
     }
 
     public function getArrayCopy()

@@ -28,6 +28,17 @@ return [
                             ],
                         ],
                     ],
+                    'profile' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/profile',
+                            'defaults' => [
+                                'controller' => UserController::class,
+                                'action' => 'profile'
+                            ],
+                        ],
+                    ],
+
                     'login' => [
                         'type' => Literal::class,
                         'options' => [

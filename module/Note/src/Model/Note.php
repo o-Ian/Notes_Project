@@ -7,12 +7,14 @@ class Note
     protected $id;
     protected $title;
     protected $content;
+    protected $user_id;
 
     public function exchangeArray($data)
     {
         $this->setId($data['id']);
         $this->setTitle($data['title']);
         $this->setContent($data['content']);
+        $this->setUser_Id($data['user_id']);
     }
 
     public function getArrayCopy()
@@ -21,6 +23,7 @@ class Note
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'content' => $this->getContent(),
+            'user_id' => $this->getUser_Id()
         ];
     }
 
@@ -81,6 +84,25 @@ class Note
     {
         $this->id = $id;
 
+        return $this;
+    }
+
+    /**
+     * Get the value of userId
+     */
+    public function getUser_Id()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * Set the value of userId
+     *
+     * @return  self
+     */
+    public function setUser_Id($id)
+    {
+        $this->user_id = $id;
         return $this;
     }
 }

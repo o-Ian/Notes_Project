@@ -29,7 +29,7 @@ class NoteTable
     public function getNote($id)
     {
         $data = $this->tableGateway->select(['id' => $id]);
-        return $data->current;
+        return $data->current();
     }
 
     public function getNotes($user_id)

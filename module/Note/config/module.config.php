@@ -38,6 +38,26 @@ return [
                                 'action' => 'delete',
                             ]
                         ]
+                    ],
+                    'create' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/create',
+                            'defaults' => [
+                                'controller' => NoteController::class,
+                                'action' => 'create',
+                            ]
+                        ]
+                    ],
+                    'edit' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/edit[/:id]',
+                            'defaults' => [
+                                'controller' => NoteController::class,
+                                'action' => 'edit',
+                            ]
+                        ]
                     ]
                 ]
             ],

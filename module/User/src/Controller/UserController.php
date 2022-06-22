@@ -38,13 +38,19 @@ class UserController extends AbstractActionController
         $user = new User;
         $form->setData($request->getPost());
         if (!$form->isValid()) {
-            $this->flashMessenger()->addErrorMessage('The form is not valid');
-            return $this->redirect()->toRoute('user', ['action' => 'registration']);
+            $this->flashMessenger()->addErrorMessage('The form is not valid.');
+            return $this->redirect()->toRoute('user/register');
         }
 
         $user->exchangeArray($form->getData());
         $this->userService->saveUser($user);
         $this->flashMessenger()->addSuccessMessage('You are registered, now sign in!');
         return $this->redirect()->toRoute('user/login');
+    }
+
+    public function profileAction()
+    {
+        $user = $this->identity();
+        return ['user' => $user];
     }
 }

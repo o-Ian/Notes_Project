@@ -40,4 +40,18 @@ form{
 .table-btn{
     display: flex;
     justify-content: space-evenly;
+    min-width: 250px;
+}
+
+.form-crud{
+    align-items: flex-start;
+}
+
+textarea.form-control{
+    width: 400px;
+    height: 140px;
+}
+
+.btn-create{
+    margin-bottom: 12px;
 }

@@ -51,6 +51,12 @@ class UserService extends UserController
                     throw new \Exception('A user with this username already exist');
                 }
             }
+            if ($key == 'firstName' || $key == 'lastName') {
+                $str = str_replace(' ', '', $value);
+                if (!ctype_alpha($str)) {
+                    throw new \Exception("The {$key} has numbers and/or special characters in its composition");
+                }
+            }
         }
         if (!$this->emailValidator->isValid($data['email'])) {
             throw new \Exception('The given email is not valid!');
@@ -96,12 +102,34 @@ class UserService extends UserController
         ];
 
         foreach ($data as $key => $value) {
+            if ($value == null) {
+                throw new \Exception("There's null values: " . $key);
+            }
             if ($key != 'email') {
                 if (strlen($value) > 15) {
                     throw new \Exception("The {$key} has a maximum lenght of 15 characters");
                 }
             }
+            if ($key == 'email') {
+                $email = $this->table->verifyEmail($value);
+                if ($email->count() > 0) {
+                    throw new \Exception('A user with this email already exist');
+                }
+            }
+            if ($key == 'username') {
+                $username = $this->table->verifyUsername($value);
+                if ($username->count() > 0) {
+                    throw new \Exception('A user with this username already exist');
+                }
+            }
+            if ($key == 'firstName' || $key == 'lastName') {
+                $str = str_replace(' ', '', $value);
+                if (!ctype_alpha($str)) {
+                    throw new \Exception("The {$key} allows only letters in its composition");
+                }
+            }
         }
+
         if (!$this->emailValidator->isValid($data['email'])) {
             throw new \Exception('The given email is not valid!');
         }

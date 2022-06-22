@@ -1,6 +1,6 @@
 <?= $this->headTitle('Listing - Notes') ?>
 
-<h1>Listagem das notas</h1>
+<h1>Notes Listing</h1>
 
 <div class="div"></div>
 
@@ -20,10 +20,10 @@
 </div>
 
 <?php if (count($notes) > 0) : ?>
+    <a href="<?= $this->url('notes/create') ?>" class="btn btn-outline-primary btn-lg btn-create"> Create note</a>
     <table class="table">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">Title</th>
                 <th scope="col">Content</th>
                 <th scope="col">Buttons</th>
@@ -34,12 +34,20 @@
             foreach ($notes as $note) :
             ?>
                 <tr>
-                    <th scope="row"><?= $note->getId() ?></th>
-                    <td><?= $note->getTitle() ?></td>
-                    <td><?= $note->getContent() ?></td>
+                    <?php if (strlen($note->getTitle()) >= 30) : ?>
+                        <td><?= substr($note->getTitle(), 0, 30) . "..." ?></td>
+                    <?php else : ?>
+                        <td><?= $note->getTitle() ?></td>
+                    <?php endif ?>
+
+                    <?php if (strlen($note->getContent()) >= 100) : ?>
+                        <td><?= substr($note->getContent(), 0, 100) . "..." ?></td>
+                    <?php else : ?>
+                        <td><?= $note->getContent() ?></td>
+                    <?php endif ?>
                     <td class="table-btn">
                         <button class="btn btn-primary">View</button>
-                        <button class="btn btn-info">Edit</button>
+                        <a href="<?= $this->url('notes/edit', ['id' => $note->getId()]) ?>" class="btn btn-info">Edit</a>
                         <button id="btn-delete" class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-href="<?= $this->url('notes/delete', ['id' => $note->getId()]) ?>">Delete</button>
                     </td>
                 </tr>
@@ -47,9 +55,10 @@
         </tbody>
     </table>
 <?php else : ?>
-    <p style=" font-size: 21px;">Não há notas adicionados, quer criar uma?</p>
-    <a href="<?= $this->url('home') ?>"><button class="btn btn-primary">Clique aqui</button></a>
+    <p style=" font-size: 21px;">There's no notes available, do you want to create one?</p>
+    <a href="<?= $this->url('notes/create') ?>"><button class="btn btn-primary">Create note</button></a>
 <?php endif ?>
+
 
 <script>
     $('#deleteModal').on('show.bs.modal', function(event) {
