@@ -22,9 +22,6 @@ class AuthController extends AbstractActionController
 
     public function loginAction()
     {
-
-        $this->isLogged();
-
         $form = new LoginForm();
         if (!$this->getRequest()->isPost()) {
             return ['form' => $form];
@@ -46,6 +43,7 @@ class AuthController extends AbstractActionController
 
     public function logoutAction()
     {
+        $this->isLogged();
         $this->authService->logout();
 
         if (!$this->identity()) {

@@ -21,12 +21,16 @@ class NoteController extends AbstractActionController
 
     public function listAction()
     {
+        $this->isLogged();
+
         $notes = $this->noteService->getNotes($this->identity()['id']);
         return ['notes' => $notes];
     }
 
     public function deleteAction()
     {
+        $this->isLogged();
+
         $id = (int)$this->params()->fromRoute('id');
         if (!$id) {
             $this->flashMessenger()->addErrorMessage("You don't have a given ID.");
@@ -41,6 +45,8 @@ class NoteController extends AbstractActionController
 
     public function createAction()
     {
+        $this->isLogged();
+
         $form = new CreateForm();
         $form->get('user_id')->setValue($this->identity()["id"]);
 
@@ -62,6 +68,8 @@ class NoteController extends AbstractActionController
 
     public function editAction()
     {
+        $this->isLogged();
+
         $id = (int) $this->params()->fromRoute('id', 0);
 
         if (!$id) {
@@ -93,6 +101,8 @@ class NoteController extends AbstractActionController
 
     public function viewAction()
     {
+        $this->isLogged();
+
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             $this->flashMessenger()->addErrorMessage("There's no id.");

@@ -27,9 +27,6 @@ class UserController extends AbstractActionController
 
     public function registerAction()
     {
-
-        $this->isLogged();
-
         $form = new RegisterForm();
         $request = $this->getRequest();
         if (!$request->isPost()) {
@@ -50,6 +47,7 @@ class UserController extends AbstractActionController
 
     public function profileAction()
     {
+        $this->isLogged();
         $user = $this->identity();
         return ['user' => $user];
     }
