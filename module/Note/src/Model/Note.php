@@ -11,10 +11,10 @@ class Note
 
     public function exchangeArray($data)
     {
-        $this->setId($data['id']);
-        $this->setTitle($data['title']);
-        $this->setContent($data['content']);
-        $this->setUser_Id($data['user_id']);
+        $this->setId(trim($data['id']));
+        $this->setTitle(trim($data['title']));
+        $this->setContent(trim($data['content']));
+        $this->setUser_Id(trim($data['user_id']));
     }
 
     public function getArrayCopy()

@@ -22,7 +22,6 @@ class NoteController extends AbstractActionController
     public function listAction()
     {
         $this->isLogged();
-
         $notes = $this->noteService->getNotes($this->identity()['id']);
         return ['notes' => $notes];
     }
@@ -37,10 +36,12 @@ class NoteController extends AbstractActionController
             return $this->redirect()->toRoute('notes/list');
         }
 
-        $this->noteService->deleteNote($id);
+        $note = $this->noteService->getNote($id);
+        if ($note->getUser_Id() != $this->identity()['id']) {
+            return $this->redirect()->toRoute('notes/list');
+        }
 
-        $this->flashMessenger()->addSuccessMessage('You deleted the post successfuly!');
-        return $this->redirect()->toRoute('notes/list');
+        $this->db_serviceOperation($this->noteService->deleteNote($id), 'notes/list');
     }
 
     public function createAction()
@@ -49,7 +50,6 @@ class NoteController extends AbstractActionController
 
         $form = new CreateForm();
         $form->get('user_id')->setValue($this->identity()["id"]);
-
         if (!$this->getRequest()->isPost()) {
             return ['form' => $form];
         }
@@ -83,6 +83,8 @@ class NoteController extends AbstractActionController
 
         $note = $this->noteService->getNote($id);
 
+        $this->noteBelongs($note, $this->identity()['id']);
+
         $form->bind($note);
 
         $request = $this->getRequest();
@@ -111,6 +113,15 @@ class NoteController extends AbstractActionController
 
         $note = $this->noteService->getNote($id);
 
+        $this->noteBelongs($note, $this->identity()['id']);
+
         return ['note' => $note];
+    }
+
+    public function noteBelongs($note, $user_Id)
+    {
+        if ($note->getUser_Id() != $user_Id) {
+            return $this->redirect()->toRoute('notes/list');
+        }
     }
 }

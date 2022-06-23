@@ -27,13 +27,20 @@ class NoteService
             'content' => $note->getContent(),
             'user_id' => $note->getUser_Id()
         ];
+        $errors = [];
+
+        if (strlen($data['title']) > 50) {
+            array_push($errors, new Result(Result::FAILURE, null, ["The title has a maximum size of 50 characters"]));
+        }
+
         foreach ($data as $key => $value) {
             if ($value == null) {
-                return new Result(Result::FAILURE_CREDENTIAL_INVALID, null, ["There's null values, all the inputs are mandatory"]);
+                array_push($errors, new Result(Result::FAILURE, null, ["The {$key} has to contain a {$key}."]));
             }
         }
-        if (strlen($data['title']) > 50) {
-            return new Result(Result::FAILURE_CREDENTIAL_INVALID, null, ["The title has a maximum size of 50 characters"]);
+
+        if ($errors) {
+            return $errors;
         }
 
         $this->table->saveNote($data);
@@ -46,7 +53,7 @@ class NoteService
             $data = $this->table->getNote($id);
             return $data;
         } catch (\Throwable $th) {
-            echo 'A error happened when we tried to get your note  : ' . $th;
+            throw new \Exception('A error happened when we tried to get your note  : ' . $th);
         }
     }
 
@@ -55,7 +62,7 @@ class NoteService
         try {
             return $this->table->getNotes($user_id);
         } catch (\Throwable $th) {
-            echo 'A error happened when we tried to list your notes  : ' . $th;
+            throw new \Exception('A error happened when we tried to list your notes  : ' . $th);
         }
     }
 
@@ -63,8 +70,9 @@ class NoteService
     {
         try {
             $this->table->deleteNote($id);
+            return new Result(Result::SUCCESS, $id, ['You deleted the post successfuly']);
         } catch (\Throwable $th) {
-            echo 'A error happened when we tried to delete your note: ' . $th;
+            return new Result(Result::FAILURE, null, ['A error happened when we tried to delete your note: ']);
         }
     }
 
@@ -74,14 +82,20 @@ class NoteService
             'title' => $note->getTitle(),
             'content' => $note->getContent(),
         ];
+        $errors = [];
+
+        if (strlen($data['title']) > 50) {
+            array_push($errors, new Result(Result::FAILURE, null, ["The title has a maximum size of 50 characters"]));
+        }
 
         foreach ($data as $key => $value) {
             if ($value == null) {
-                return new Result(Result::FAILURE, null, ["There's null values"]);
+                array_push($errors, new Result(Result::FAILURE, null, ["The {$key} has to contain a {$key}."]));
             }
         }
-        if (strlen($data['title']) > 50) {
-            return new Result(Result::FAILURE, null, ["The title has a maximum size of 50 characters"]);
+
+        if ($errors) {
+            return $errors;
         }
 
         try {

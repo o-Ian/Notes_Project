@@ -49,7 +49,7 @@ class CreateForm extends Form
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [
-                'value' => 'Create',
+                'value' => 'Create note',
                 'id' => 'buttonCreate',
                 'class' => 'btn btn-primary'
             ]

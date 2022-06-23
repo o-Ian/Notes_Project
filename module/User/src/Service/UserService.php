@@ -27,37 +27,46 @@ class UserService
             'lastName' => $user->getLastName(),
             'email' => $user->getEmail()
         ];
-
+        $errors = [];
         foreach ($data as $key => $value) {
             if ($value == null) {
-                throw new \Exception("There's null values: " . $key);
+                $error = new Result(Result::FAILURE, null, ["There's null values: " . $key]);
+                array_push($errors, $error);
             }
             if ($key != 'email') {
                 if (strlen($value) > 15) {
-                    return new Result(Result::FAILURE, null, ["The {$key} has a maximum lenght of 15 characters!"]);
-                }
-            }
-            if ($key == 'email') {
-                $email = $this->table->verifyEmail($value);
-                if ($email->count() > 0) {
-                    return new Result(Result::FAILURE, null, ["A user with this email already exist"]);
+                    $error = new Result(Result::FAILURE, null, ["The {$key} has a maximum lenght of 15 characters!"]);
+                    array_push($errors, $error);
                 }
             }
             if ($key == 'username') {
                 $username = $this->table->verifyUsername($value);
                 if ($username->count() > 0) {
-                    return new Result(Result::FAILURE, null, ["A user with this username already exist"]);
+                    $error = new Result(Result::FAILURE, null, ["A user with this username already exist"]);
+                    array_push($errors, $error);
+                }
+            }
+            if ($key == 'email') {
+                $email = $this->table->verifyEmail($value);
+                if ($email->count() > 0) {
+                    $error = new Result(Result::FAILURE, null, ["A user with this email already exist"]);
+                    array_push($errors, $error);
                 }
             }
             if ($key == 'firstName' || $key == 'lastName') {
                 $str = str_replace(' ', '', $value);
                 if (!ctype_alpha($str)) {
-                    return new Result(Result::FAILURE, null, ["The {$key} has numbers and/or special characters in its composition"]);
+                    $error = new Result(Result::FAILURE, null, ["The {$key} has numbers and/or special characters in its composition"]);
+                    array_push($errors, $error);
                 }
             }
         }
         if (!$this->emailValidator->isValid($data['email'])) {
-            return new Result(Result::FAILURE, null, ["The given email is not valid!"]);
+            $error = new Result(Result::FAILURE, null, ["The given email is not valid!"]);
+            array_push($errors, $error);
+        }
+        if ($errors) {
+            return $errors;
         }
 
         try {

@@ -42,6 +42,7 @@ class EditForm extends Form
             ],
             'attributes' => [
                 'class' => 'form-control autoTxtArea',
+                'oninput' => 'if(this.scrollHeight > this.offsetHeight) this.rows += 2'
             ]
         ]);
 
@@ -49,7 +50,7 @@ class EditForm extends Form
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [
-                'value' => 'Edit',
+                'value' => 'Save changes',
                 'id' => 'buttonEdit',
                 'class' => 'btn btn-primary'
             ]
