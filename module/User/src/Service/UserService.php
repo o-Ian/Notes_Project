@@ -4,13 +4,11 @@ namespace User\Service;
 
 use Exception;
 use Laminas\Authentication\Result;
+use Laminas\Mvc\Plugin\FlashMessenger\View\Helper\FlashMessenger;
 use Laminas\Validator\EmailAddress;
-use User\Controller\IndexController;
-use User\Controller\UserController;
-use User\Model\User;
 use User\Model\UserTable;
 
-class UserService extends UserController
+class UserService
 {
     protected $table;
     protected $emailValidator;
@@ -36,33 +34,38 @@ class UserService extends UserController
             }
             if ($key != 'email') {
                 if (strlen($value) > 15) {
-                    throw new \Exception("The {$key} has a maximum lenght of 15 characters");
+                    return new Result(Result::FAILURE, null, ["The {$key} has a maximum lenght of 15 characters!"]);
                 }
             }
             if ($key == 'email') {
                 $email = $this->table->verifyEmail($value);
                 if ($email->count() > 0) {
-                    throw new \Exception('A user with this email already exist');
+                    return new Result(Result::FAILURE, null, ["A user with this email already exist"]);
                 }
             }
             if ($key == 'username') {
                 $username = $this->table->verifyUsername($value);
                 if ($username->count() > 0) {
-                    throw new \Exception('A user with this username already exist');
+                    return new Result(Result::FAILURE, null, ["A user with this username already exist"]);
                 }
             }
             if ($key == 'firstName' || $key == 'lastName') {
                 $str = str_replace(' ', '', $value);
                 if (!ctype_alpha($str)) {
-                    throw new \Exception("The {$key} has numbers and/or special characters in its composition");
+                    return new Result(Result::FAILURE, null, ["The {$key} has numbers and/or special characters in its composition"]);
                 }
             }
         }
         if (!$this->emailValidator->isValid($data['email'])) {
-            throw new \Exception('The given email is not valid!');
+            return new Result(Result::FAILURE, null, ["The given email is not valid!"]);
         }
 
-        $this->table->saveUser($data);
+        try {
+            $this->table->saveUser($data);
+            return new Result(Result::SUCCESS, null, ['You are registered, now sign in!']);
+        } catch (\Throwable $th) {
+            return new Result(Result::FAILURE, null, ['A error happened when we trie to save your user']);
+        }
     }
 
     public function getUser($username)

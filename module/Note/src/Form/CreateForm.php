@@ -12,7 +12,6 @@ class CreateForm extends Form
         $this->setAttribute('method', 'POST');
         $this->setAttribute('class', 'form-crud');
 
-
         $this->add([
             'name' => 'id',
             'type' => 'hidden'
@@ -41,7 +40,8 @@ class CreateForm extends Form
                 'label' => 'Content:'
             ],
             'attributes' => [
-                'class' => 'form-control'
+                'class' => 'form-control ',
+                'oninput' => 'if(this.scrollHeight > this.offsetHeight) this.rows += 1'
             ]
         ]);
 

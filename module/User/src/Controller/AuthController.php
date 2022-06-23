@@ -41,13 +41,7 @@ class AuthController extends AbstractActionController
 
         $result = $this->authService->login($data['email'], $data['username'], $data['remember_me']);
 
-        if ($result->getCode() == Result::SUCCESS) {
-            $this->flashMessenger()->addSuccessMessage('You are logged in');
-            return $this->redirect()->toRoute('home');
-        } else {
-            $this->flashMessenger()->addErrorMessage('E-mail and/or username are wrong');
-            return $this->redirect()->toRoute('user/login');
-        }
+        $this->db_serviceOperation($result, 'user/login', 'notes/list');
     }
 
     public function logoutAction()

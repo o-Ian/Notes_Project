@@ -2,8 +2,6 @@
 
 <h1>Notes Listing</h1>
 
-<div class="div"></div>
-
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -45,10 +43,10 @@
                     <?php else : ?>
                         <td><?= $note->getContent() ?></td>
                     <?php endif ?>
-                    <td class="table-btn">
-                        <button class="btn btn-primary">View</button>
-                        <a href="<?= $this->url('notes/edit', ['id' => $note->getId()]) ?>" class="btn btn-info">Edit</a>
-                        <button id="btn-delete" class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-href="<?= $this->url('notes/delete', ['id' => $note->getId()]) ?>">Delete</button>
+                    <td class="table-btn" style="border-bottom-width: 0">
+                        <a href="<?= $this->url('notes/view', ['id' => $note->getId()]) ?>" class="btn btn-primary">View</a>
+                        <a href="<?= $this->url('notes/edit', ['id' => $note->getId()]) ?>" class="btn btn-success">Edit</a>
+                        <button id="btn-delete" class="btn btn-danger" data-target="#deleteModal" data-toggle="modal" data-href="<?= $this->url('notes/delete', ['id' => $note->getId()]) ?>"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 </tr>
             <?php endforeach; ?>

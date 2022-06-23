@@ -58,6 +58,16 @@ return [
                                 'action' => 'edit',
                             ]
                         ]
+                    ],
+                    'view' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/view[/:id]',
+                            'defaults' => [
+                                'controller' => NoteController::class,
+                                'action' => 'view',
+                            ]
+                        ]
                     ]
                 ]
             ],

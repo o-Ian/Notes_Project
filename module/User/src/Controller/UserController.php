@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Controller;
 
+use Laminas\Authentication\Result;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use User\Form\RegisterForm;
@@ -43,9 +44,8 @@ class UserController extends AbstractActionController
         }
 
         $user->exchangeArray($form->getData());
-        $this->userService->saveUser($user);
-        $this->flashMessenger()->addSuccessMessage('You are registered, now sign in!');
-        return $this->redirect()->toRoute('user/login');
+        $dbOperation = $this->userService->saveUser($user);
+        $this->db_serviceOperation($dbOperation, 'user/register', 'user/login');
     }
 
     public function profileAction()

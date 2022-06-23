@@ -2,6 +2,7 @@
 
 namespace Note\Service;
 
+use Laminas\Authentication\Result;
 use Laminas\Validator\EmailAddress;
 use Note\Model\NoteTable;
 use User\Model\UserTable;
@@ -28,14 +29,15 @@ class NoteService
         ];
         foreach ($data as $key => $value) {
             if ($value == null) {
-                throw new \Exception("There's null values, all the inputs are mandatory");
+                return new Result(Result::FAILURE_CREDENTIAL_INVALID, null, ["There's null values, all the inputs are mandatory"]);
             }
         }
         if (strlen($data['title']) > 50) {
-            throw new \Exception("The title has a maximum size of 50 characters");
+            return new Result(Result::FAILURE_CREDENTIAL_INVALID, null, ["The title has a maximum size of 50 characters"]);
         }
 
         $this->table->saveNote($data);
+        return new Result(Result::SUCCESS, $note, ["The note has been created"]);
     }
 
     public function getNote($id)
@@ -75,13 +77,18 @@ class NoteService
 
         foreach ($data as $key => $value) {
             if ($value == null) {
-                throw new \Throwable("There's null values");
+                return new Result(Result::FAILURE, null, ["There's null values"]);
             }
         }
         if (strlen($data['title']) > 50) {
-            throw new \Throwable("The title has a maximum size of 50 characters");
+            return new Result(Result::FAILURE, null, ["The title has a maximum size of 50 characters"]);
         }
 
-        $this->table->updateNote($data, $note->getId());
+        try {
+            $this->table->updateNote($data, $note->getId());
+            return new Result(Result::SUCCESS, $note, ["The note has been edited!"]);
+        } catch (\Throwable $th) {
+            return new Result(Result::FAILURE, null, ["An unexpected error happened when we tried to update your note"]);
+        }
     }
 }

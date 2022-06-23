@@ -24,3 +24,11 @@ echo $this->formHidden($form->get('user_id'));
     echo $this->formSubmit($form->get('submit'));
     ?>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var txtarea = document.querySelector("textarea.form-control");
+        txtarea.style.height = (txtarea.scrollHeight + 5) + "px";
+
+    });
+</script>

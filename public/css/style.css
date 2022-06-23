@@ -48,10 +48,21 @@ form{
 }
 
 textarea.form-control{
-    width: 400px;
-    height: 140px;
+    width: 80vw;
+    /* height: 140px; */
 }
 
 .btn-create{
     margin-bottom: 12px;
 }
+
+.buttons{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 40px;
+    margin-bottom: 7px;
+}
+
+.btn-edit-view{
+    margin-right: 12px;
+}   

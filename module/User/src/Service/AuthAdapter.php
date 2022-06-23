@@ -20,9 +20,9 @@ class AuthAdapter implements AdapterInterface
     {
         $user = $this->userService->authUser($this->username, $this->email);
         if (!$user) {
-            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND,  null, ['User not found']);
+            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND,  null, ['User not found, email and/or username wrong.']);
         }
-        return new Result(Result::SUCCESS, $user->toArray()[0], ['Successfully logged in']);
+        return new Result(Result::SUCCESS, $user->toArray()[0], ['Successfully logged in!']);
     }
 
     /**

@@ -57,10 +57,7 @@ class NoteController extends AbstractActionController
         }
 
         $note->exchangeArray($form->getData());
-
-        $this->noteService->saveNote($note);
-        $this->flashMessenger()->addSuccessMessage('The note has been created!');
-        return $this->redirect()->toRoute('notes/list');
+        $this->db_serviceOperation($this->noteService->saveNote($note), 'notes/create', 'notes/list');
     }
 
     public function editAction()
@@ -91,9 +88,19 @@ class NoteController extends AbstractActionController
             throw new \Exception('The form is not valid.');
         }
 
-        $this->noteService->updateNote($note);
+        $this->db_serviceOperation($this->noteService->updateNote($note), 'notes/edit', 'notes/list', ['id' => $id]);
+    }
 
-        $this->flashMessenger()->addSuccessMessage('The note has been edited!');
-        return $this->redirect()->toRoute('notes/list');
+    public function viewAction()
+    {
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            $this->flashMessenger()->addErrorMessage("There's no id.");
+            return $this->redirect()->toRoute('notes/list');
+        }
+
+        $note = $this->noteService->getNote($id);
+
+        return ['note' => $note];
     }
 }

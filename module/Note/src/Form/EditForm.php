@@ -41,7 +41,7 @@ class EditForm extends Form
                 'label' => 'Content:'
             ],
             'attributes' => [
-                'class' => 'form-control'
+                'class' => 'form-control autoTxtArea',
             ]
         ]);
 
