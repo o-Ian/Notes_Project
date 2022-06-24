@@ -21,14 +21,18 @@ class NoteController extends AbstractActionController
 
     public function listAction()
     {
-        $this->isLogged();
+        if (!$this->isLogged()) {
+            return $this->redirect()->toRoute('home');
+        }
         $notes = $this->noteService->getNotes($this->identity()['id']);
         return ['notes' => $notes];
     }
 
     public function deleteAction()
     {
-        $this->isLogged();
+        if (!$this->isLogged()) {
+            return $this->redirect()->toRoute('home');
+        }
 
         $id = (int)$this->params()->fromRoute('id');
         if (!$id) {
@@ -37,7 +41,8 @@ class NoteController extends AbstractActionController
         }
 
         $note = $this->noteService->getNote($id);
-        if ($note->getUser_Id() != $this->identity()['id']) {
+        if (!$note || $note->getUser_Id() != $this->identity()['id']) {
+            $this->flashMessenger()->addErrorMessage("You don't have access to this note.");
             return $this->redirect()->toRoute('notes/list');
         }
 
@@ -46,7 +51,9 @@ class NoteController extends AbstractActionController
 
     public function createAction()
     {
-        $this->isLogged();
+        if (!$this->isLogged()) {
+            return $this->redirect()->toRoute('home');
+        }
 
         $form = new CreateForm();
         $form->get('user_id')->setValue($this->identity()["id"]);
@@ -68,7 +75,9 @@ class NoteController extends AbstractActionController
 
     public function editAction()
     {
-        $this->isLogged();
+        if (!$this->isLogged()) {
+            return $this->redirect()->toRoute('home');
+        }
 
         $id = (int) $this->params()->fromRoute('id', 0);
 
@@ -98,13 +107,14 @@ class NoteController extends AbstractActionController
             throw new \Exception('The form is not valid.');
         }
 
-        $this->db_serviceOperation($this->noteService->updateNote($note), 'notes/edit', 'notes/list', ['id' => $id]);
+        $this->db_serviceOperation($this->noteService->updateNote($note), 'notes/edit', 'notes/view', ['id' => $id]);
     }
 
     public function viewAction()
     {
-        $this->isLogged();
-
+        if (!$this->isLogged()) {
+            return $this->redirect()->toRoute('home');
+        }
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             $this->flashMessenger()->addErrorMessage("There's no id.");
@@ -120,7 +130,8 @@ class NoteController extends AbstractActionController
 
     public function noteBelongs($note, $user_Id)
     {
-        if ($note->getUser_Id() != $user_Id) {
+        if (!$note || $note->getUser_Id() != $user_Id) {
+            $this->flashMessenger()->addErrorMessage("You don't have access to this note.");
             return $this->redirect()->toRoute('notes/list');
         }
     }

@@ -30,7 +30,10 @@ class NoteService
         $errors = [];
 
         if (strlen($data['title']) > 50) {
-            array_push($errors, new Result(Result::FAILURE, null, ["The title has a maximum size of 50 characters"]));
+            array_push($errors, new Result(Result::FAILURE, null, ["The title has a maximum size of 50 characters."]));
+        }
+        if (strlen($data['content']) > 10000) {
+            array_push($errors, new Result(Result::FAILURE, null, ["The content has a maximum size of 10000 characters."]));
         }
 
         foreach ($data as $key => $value) {

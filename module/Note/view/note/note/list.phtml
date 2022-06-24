@@ -17,7 +17,8 @@
     </div>
 </div>
 
-<?php if (count($notes) > 0) : ?>
+<?php
+if (count($notes) > 0) : ?>
     <a href="<?= $this->url('notes/create') ?>" class="btn btn-outline-primary btn-lg btn-create"> Create note</a>
     <table class="table">
         <thead class="thead-dark">

@@ -47,7 +47,9 @@ class UserController extends AbstractActionController
 
     public function profileAction()
     {
-        $this->isLogged();
+        if (!$this->isLogged()) {
+            return $this->redirect()->toRoute('home');
+        }
         $user = $this->identity();
         return ['user' => $user];
     }
