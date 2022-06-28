@@ -6,6 +6,7 @@ namespace User\Controller;
 
 use Laminas\Authentication\Result;
 use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use User\Form\RegisterForm;
 use User\Model\User;
@@ -14,9 +15,11 @@ use User\Service\UserService;
 class UserController extends AbstractActionController
 {
     protected $userService;
+    protected $container;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, Container $container)
     {
+        $this->container = $container;
         $this->userService = $userService;
     }
 
@@ -24,12 +27,14 @@ class UserController extends AbstractActionController
     {
         return new ViewModel();
     }
-
     public function registerAction()
     {
         $form = new RegisterForm();
         $request = $this->getRequest();
         if (!$request->isPost()) {
+            if ($this->flashMessenger()->hasErrorMessages()) {
+                return new ViewModel(['form' => $form->bind($this->container->values)]);
+            }
             return new ViewModel(['form' => $form]);
         }
 
@@ -41,8 +46,14 @@ class UserController extends AbstractActionController
         }
 
         $user->exchangeArray($form->getData());
+        $newForm = new RegisterForm();
         $dbOperation = $this->userService->saveUser($user);
-        $this->db_serviceOperation($dbOperation, 'user/register', 'user/login');
+        $operation = $this->db_serviceOperation_form($dbOperation);
+        if (!$operation) {
+            $this->container->values = $request->getPost();
+            return $this->redirect()->toRoute('user/register');
+        }
+        return $this->redirect()->toRoute('user/login');
     }
 
     public function profileAction()

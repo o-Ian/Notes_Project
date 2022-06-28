@@ -55,7 +55,7 @@ class UserService
             }
             if ($key == 'firstName' || $key == 'lastName') {
                 $str = str_replace(' ', '', $value);
-                if (!ctype_alpha($str)) {
+                if (!ctype_alpha($str) && !preg_match("/^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]+$/", $str)) {
                     $error = new Result(Result::FAILURE, null, ["The {$key} has numbers and/or special characters in its composition"]);
                     array_push($errors, $error);
                 }
