@@ -82,7 +82,7 @@ class Module
                     return new UserController($container->get(UserService::class), new Container());
                 },
                 AuthController::class => function ($container) {
-                    return new AuthController($container->get(UserService::class), $container->get(AuthService::class));
+                    return new AuthController($container->get(UserService::class), $container->get(AuthService::class), new Container());
                 }
             ]
         ];

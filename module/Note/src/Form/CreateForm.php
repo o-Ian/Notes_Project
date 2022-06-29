@@ -35,13 +35,9 @@ class CreateForm extends Form
 
         $this->add([
             'name' => 'content',
-            'type' => 'textarea',
-            'options' => [
-                'label' => 'Content:'
-            ],
+            'type' => 'hidden',
             'attributes' => [
-                'class' => 'form-control ',
-                'oninput' => 'if(this.scrollHeight > this.offsetHeight) this.rows += 1'
+                'id' => 'content'
             ]
         ]);
 
@@ -51,7 +47,8 @@ class CreateForm extends Form
             'attributes' => [
                 'value' => 'Create note',
                 'id' => 'buttonCreate',
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
+                'onclick' => "$('#content').val($('#htmlContent').html())"
             ]
         ]);
     }

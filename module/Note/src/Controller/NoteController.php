@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Note\Controller;
 
 use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Session\Container;
 use Note\Form\CreateForm;
 use Note\Form\EditForm;
 use Note\Model\Note;
@@ -14,9 +15,10 @@ class NoteController extends AbstractActionController
 {
     protected $noteService;
 
-    public function __construct(NoteService $noteService)
+    public function __construct(NoteService $noteService, Container $container)
     {
         $this->noteService = $noteService;
+        $this->container = $container;
     }
 
     public function listAction()
@@ -58,6 +60,9 @@ class NoteController extends AbstractActionController
         $form = new CreateForm();
         $form->get('user_id')->setValue($this->identity()["id"]);
         if (!$this->getRequest()->isPost()) {
+            if ($this->flashMessenger()->hasErrorMessages()) {
+                return ['form' => $form->bind($this->container->values)];
+            }
             return ['form' => $form];
         }
 
@@ -70,7 +75,13 @@ class NoteController extends AbstractActionController
         }
 
         $note->exchangeArray($form->getData());
-        $this->db_serviceOperation($this->noteService->saveNote($note), 'notes/create', 'notes/list');
+        $dbOperation = $this->noteService->saveNote($note);
+        $operation = $this->db_serviceOperation_form($dbOperation);
+        if (!$operation) {
+            $this->container->values = $this->getRequest()->getPost();
+            return $this->redirect()->toRoute('notes/create');
+        }
+        $this->redirect()->toRoute('notes/list');
     }
 
     public function editAction()
@@ -99,6 +110,9 @@ class NoteController extends AbstractActionController
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
+            if ($this->flashMessenger()->hasErrorMessages()) {
+                return ['form' => $form->bind($this->container->values), 'id' => $id];
+            }
             return ['form' => $form, 'id' => $id];
         }
         $form->setData($request->getPost());
@@ -106,8 +120,13 @@ class NoteController extends AbstractActionController
         if (!$form->isValid()) {
             throw new \Exception('The form is not valid.');
         }
-
-        $this->db_serviceOperation($this->noteService->updateNote($note), 'notes/edit', 'notes/view', ['id' => $id]);
+        $dbOperation = $this->noteService->updateNote($note);
+        $operation = $this->db_serviceOperation_form($dbOperation);
+        if (!$operation) {
+            $this->container->values = $request->getPost();
+            return $this->redirect()->toRoute('notes/edit', ['id' => $id]);
+        }
+        $this->redirect()->toRoute('notes/view', ['id' => $id]);
     }
 
     public function viewAction()

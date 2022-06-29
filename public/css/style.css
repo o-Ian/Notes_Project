@@ -78,3 +78,23 @@ textarea.form-control:focus{
 .btn-edit-view{
     margin-right: 12px;
 }   
+
+#htmlContent{
+    width: 80vw;
+    border: 0;
+    background-color: #f8f8f8;
+    min-height: 140px;
+    height: 800px;
+}
+
+#htmlContent:focus{
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+    background-color: #f8f8f8;
+}
+
+.btn-TxtStyle{
+    display: flex;
+    flex-direction: row;
+}

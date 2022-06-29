@@ -36,13 +36,9 @@ class EditForm extends Form
 
         $this->add([
             'name' => 'content',
-            'type' => 'textarea',
-            'options' => [
-                'label' => 'Content:'
-            ],
+            'type' => 'hidden',
             'attributes' => [
-                'class' => 'form-control autoTxtArea',
-                'oninput' => 'if(this.scrollHeight > this.offsetHeight) this.rows += 2'
+                'id' => 'content'
             ]
         ]);
 
@@ -52,7 +48,8 @@ class EditForm extends Form
             'attributes' => [
                 'value' => 'Save changes',
                 'id' => 'buttonEdit',
-                'class' => 'btn btn-primary'
+                'class' => 'btn btn-primary',
+                'onclick' => "$('#content').val($('#htmlContent').html())"
             ]
         ]);
     }

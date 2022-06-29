@@ -7,6 +7,7 @@ namespace Note;
 use Laminas\Db\Adapter\AdapterInterface;
 use Laminas\Db\ResultSet\ResultSet;
 use Laminas\Db\TableGateway\TableGateway;
+use Laminas\Session\Container;
 use Laminas\Validator\EmailAddress;
 use PhpParser\Node\Expr\FuncCall;
 use Note\Controller\IndexController;
@@ -54,7 +55,7 @@ class Module
         return [
             'factories' => [
                 NoteController::class => function ($container) {
-                    return new NoteController($container->get(NoteService::class));
+                    return new NoteController($container->get(NoteService::class), new Container());
                 }
             ]
         ];

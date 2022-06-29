@@ -33,9 +33,9 @@ class UserController extends AbstractActionController
         $request = $this->getRequest();
         if (!$request->isPost()) {
             if ($this->flashMessenger()->hasErrorMessages()) {
-                return new ViewModel(['form' => $form->bind($this->container->values)]);
+                return ['form' => $form->bind($this->container->values)];
             }
-            return new ViewModel(['form' => $form]);
+            return ['form' => $form];
         }
 
         $user = new User;

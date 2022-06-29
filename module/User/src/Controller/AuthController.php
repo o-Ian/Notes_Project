@@ -4,6 +4,7 @@ namespace User\Controller;
 
 use Laminas\Authentication\Result;
 use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Session\Container;
 use User\Form\LoginForm;
 use User\Form\UserForm;
 use User\Service\AuthService;
@@ -14,16 +15,20 @@ class AuthController extends AbstractActionController
     protected $userService;
     protected $authService;
 
-    public function __construct(UserService $userService, AuthService $authService,)
+    public function __construct(UserService $userService, AuthService $authService, Container $container)
     {
         $this->userService = $userService;
         $this->authService = $authService;
+        $this->container = $container;
     }
 
     public function loginAction()
     {
         $form = new LoginForm();
         if (!$this->getRequest()->isPost()) {
+            if ($this->flashMessenger()->hasErrorMessages()) {
+                return ['form' => $form->bind($this->container->values)];
+            }
             return ['form' => $form];
         }
 
@@ -36,9 +41,13 @@ class AuthController extends AbstractActionController
 
         $data = $form->getData();
 
-        $result = $this->authService->login($data['email'], $data['username'], $data['remember_me']);
-
-        $this->db_serviceOperation($result, 'user/login', 'notes/list');
+        $dbOperation = $this->authService->login($data['email'], $data['username'], $data['remember_me']);
+        $operation = $this->db_serviceOperation_form($dbOperation);
+        if (!$operation) {
+            $this->container->values = $this->getRequest()->getPost();
+            return $this->redirect()->toRoute('user/login');
+        }
+        return $this->redirect()->toRoute('notes/list');
     }
 
     public function logoutAction()

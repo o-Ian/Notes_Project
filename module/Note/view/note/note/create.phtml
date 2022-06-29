@@ -8,6 +8,7 @@ $form->prepare();
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 echo $this->formHidden($form->get('user_id'));
+echo $this->formHidden($form->get('content'));
 ?>
 <div class="form-group form-group-btn">
     <?php
@@ -19,8 +20,53 @@ echo $this->formHidden($form->get('user_id'));
     echo $this->formRow($form->get('title'));
     ?>
 </div>
+
 <div class="form-group">
-    <?php
-    echo $this->formRow($form->get('content'));
-    ?>
+    <label for="txtArea">Content:</label>
+    <div class="btn-TxtStyle">
+        <button class="btn btn-info" onclick="document.execCommand('bold'); event.preventDefault()">B</button>
+        <button class="btn btn-light" onclick="document.execCommand('italic'); event.preventDefault()">I</button>
+        <button class="btn btn-light" onclick="document.execCommand('CreateLink', false, 'https://www.google.com'); event.preventDefault();  $('a').attr('target', '_blank');">
+            Link
+        </button>
+        <button class="btn btn-info" onclick="document.execCommand('underline'); event.preventDefault()">
+            Underline
+        </button>
+        <button class="btn btn-info" onclick="insertImage(); event.preventDefault()">
+            Insert Image
+        </button>
+    </div>
+    <div contenteditable="true" name="htmlContent" id="htmlContent" class="form-control txtArea" style="display: inline-block"></div>
 </div>
+
+
+<style>
+    #mala {
+        border: 2px solid;
+        padding: 20px;
+        width: 100px;
+        resize: horizontal;
+        overflow: auto;
+    }
+
+    img {
+        margin: 0 auto;
+        resize: horizontal;
+        overflow: auto;
+        max-width: 55vh;
+        width: -webkit-fill-available;
+
+    }
+</style>
+<script>
+    function insertImage() {
+        $(' #htmlContent').append(" <input id='range' name='range' oninput='changeImageSize(value)' onload='changeImageSize(value)' type='range' min='3' max='55' value=55><img src='https://cdn-icons-png.flaticon.com/512/2308/2308197.png' alt='' srcset='' id='img-add'' >")
+    }
+</script>
+
+<script>
+    function changeImageSize(value) {
+        $('#img-add').css("width", value + "vw");
+    }
+</script>
+<script src="<?= $this->basePath('js/prettier_txt.js') ?>"></script>
