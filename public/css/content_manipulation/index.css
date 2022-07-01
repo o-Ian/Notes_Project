@@ -1,0 +1,24 @@
+.img_add {
+    margin: 0 auto;
+    resize: horizontal;
+    overflow: auto;
+    max-width: 35vw;
+    width: -webkit-fill-available;
+    display: flex;
+}
+
+.close-add-image {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 17px;
+}
+
+.range {
+    display: flex;
+    margin: 0 auto;
+}
+
+.selected {
+    background-color: dodgerblue;
+    color: white;
+}

@@ -26,7 +26,8 @@
         ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
     ?>
     <script src="https://kit.fontawesome.com/20b10c76ff.js" crossorigin="anonymous"></script>
-
+    <!-- Emojis -->
+    <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <!-- Scripts -->
@@ -114,6 +115,11 @@
     <script>
         $(document).ready(function() {
             $(".alert").fadeIn(300).delay(6000).fadeOut(400);
+        });
+    </script>
+    <script>
+        twemoji.parse(document.body, {
+            size: '16x16'
         });
     </script>
 </body>

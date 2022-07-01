@@ -1,4 +1,34 @@
+<link rel="stylesheet" href="<?= $this->basePath('css/content_manipulation/index.css') ?>">
+
 <h2>Edit page</h2>
+
+<!-- Modal for add image link-->
+<div class="modal fade" id="addImageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close close-add-image" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+            <input type="text" id="link-image">
+            <input type="hidden" name="note_id" id="note_id" value="">
+            <div class="modal-footer">
+                <a id="dataConfirm" data-dismiss="modal" onclick="insertImage()"><button type="button" class="btn btn-primary">Insert Image</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for add link-->
+<div class="modal fade" id="addLink" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close close-add-image" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+            <input type="text" id="link" class="form-control" placeholder="insert valid link incl. http://">
+            <input type="hidden" name="note_id" id="note_id" value="">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="dataConfirm-link" data-dismiss="modal">Insert link</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php
 
@@ -15,6 +45,7 @@ echo $this->formHidden($form->get('content'));
     <?php
     echo $this->formSubmit($form->get('submit'));
     ?>
+    <button class="btn btn-secondary" onclick="" id="btn-discard">Discard changes</button>
 </div>
 <div class="form-group">
     <?php
@@ -24,11 +55,41 @@ echo $this->formHidden($form->get('content'));
 
 <div class="form-group">
     <label for="txtArea">Content:</label>
+    <!-- Styling buttons -->
+    <div class="btn-TxtStyle">
+        <button class="btn btn-info" onclick="document.execCommand('bold'); event.preventDefault()">B</button>
+        <button class="btn btn-light" onclick="document.execCommand('italic'); event.preventDefault()">I</button>
+        <button class="btn btn-light" data-target="#addLink" data-toggle="modal" onclick="event.preventDefault();">
+            Link
+        </button>
+        <button class="btn btn-info" onclick="document.execCommand('underline'); event.preventDefault()">
+            Underline
+        </button>
+        <button id="btn-insert" class="btn btn-info" data-toggle="modal" data-target="#addImageModal" onclick="event.preventDefault()">
+            Insert Image
+        </button>
+    </div>
     <div contenteditable="true" name="htmlContent" id="htmlContent" class="form-control txtArea" style="display: inline-block"></div>
 </div>
 
-<div>
-    <button id="butt">B</button>
-</div>
 
-<script src="<?= $this->basePath('js/prettier_txt.js') ?>"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#htmlContent').html($('#content').val());
+        var txtArea = document.getElementById('htmlContent');
+        twemoji.parse(txtArea, {
+            size: '16x16'
+        });
+    })
+</script>
+<script>
+    $("#btn-discard").click(function(event) {
+        event.preventDefault();
+        $('#htmlContent').html($('#content').val());
+    })
+</script>
+<script src="<?= $this->basePath('js/content_manipulation/remove_image.js') ?>"></script>
+<script src="<?= $this->basePath('js/content_manipulation/insert_link.js') ?>"></script>
+<script src="<?= $this->basePath('js/content_manipulation/insert_image.js') ?>"></script>
+<script src="<?= $this->basePath('js/content_manipulation/change_image_size.js') ?>"></script>

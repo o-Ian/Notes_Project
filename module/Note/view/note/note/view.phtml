@@ -1,4 +1,10 @@
+<link rel="stylesheet" href="<?= $this->basePath('css/content_manipulation/index.css') ?>">
+
 <h2>View Page</h2>
+
+<?php
+$content_clean =  preg_replace("/<input[^>]+\>/i", "", $note->getContent());
+?>
 
 <div class="container-buttons">
     <div class="buttons">
@@ -18,7 +24,7 @@
     </div>
     <div class="list-group-item">
         <h5>Content </h5>
-        <?= nl2br($note->getContent()) ?>
+        <?= $content_clean ?>
     </div>
 </div>
 

@@ -31,6 +31,9 @@ if (count($notes) > 0) : ?>
         <tbody>
             <?php
             foreach ($notes as $note) :
+                $content_img = preg_replace("/<img contenteditable=[^>]+\>/i", "*image 📷", $note->getContent());
+                $content_clean = str_replace("<br>", " ", preg_replace("/<input[^>]+\>/i", "", $content_img));
+                $content_no_emoji = preg_replace("/<img[^>]+\>/i", "", $content_clean);
             ?>
                 <tr>
                     <?php if (strlen($note->getTitle()) >= 30) : ?>
@@ -39,10 +42,10 @@ if (count($notes) > 0) : ?>
                         <td><?= $note->getTitle() ?></td>
                     <?php endif ?>
 
-                    <?php if (strlen($note->getContent()) >= 100) : ?>
-                        <td><?= substr($note->getContent(), 0, 100) . "..." ?></td>
+                    <?php if (strlen($content_no_emoji) >= 100) : ?>
+                        <td><?= substr(str_replace("<br>", " ", $content_clean), 0, 100) . "..." ?></td>
                     <?php else : ?>
-                        <td><?= $note->getContent() ?></td>
+                        <td><?= str_replace("<br>", " ", $content_clean) ?></td>
                     <?php endif ?>
                     <td class="table-btn" style="border-bottom-width: 0">
                         <a href="<?= $this->url('notes/view', ['id' => $note->getId()]) ?>" class="btn btn-primary">View</a>
@@ -58,11 +61,4 @@ if (count($notes) > 0) : ?>
     <a href="<?= $this->url('notes/create') ?>"><button class="btn btn-primary">Create note</button></a>
 <?php endif ?>
 
-
-<script>
-    $('#deleteModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget);
-        var href_Id = button.data('href');
-        $('#dataConfirm').attr('href', href_Id);
-    })
-</script>
+<script src="<?= $this->basePath('js/list/index.js') ?>"></script>
